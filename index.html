@@ -96,7 +96,7 @@
         <section id="itinerary" class="mb-16">
             <h2 class="text-3xl font-bold mb-8 text-center text-slate-800">每日行程總覽</h2>
             
-            <!-- 天數切換按鈕 (上二、中二、下一 的排版) -->
+            <!-- 天數切換按鈕 -->
             <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8" id="day-tabs-container">
                 <button onclick="setActiveDay(1)" data-day="1" class="day-tab"></button>
                 <button onclick="setActiveDay(2)" data-day="2" class="day-tab"></button>
@@ -154,7 +154,7 @@
                             <i data-lucide="external-link" class="w-5 h-5 absolute top-6 right-6 text-slate-300 group-hover:text-teal-500 transition-colors"></i>
                         </h3>
                         <p class="text-slate-600 text-sm leading-relaxed">
-                            【萬豪集團旗下】酒店展現現代設計與細膩品味，融合萬豪集團一貫的專業服務，營造高雅舒適的住宿氛圍。客房採用雅緻設計，窗外可眺望迷人海景或城市風光，氛圍寧靜而放鬆。設施包含戶外泳池、健身中心與水療空間。
+                            【萬豪集團旗下】酒店展現現代設計與細膩品味，融合萬豪集團一貫的專業服務，營造高雅舒適的住宿氛圍。
                         </p>
                     </div>
                 </a>
@@ -175,7 +175,7 @@
                             <i data-lucide="external-link" class="w-5 h-5 absolute top-6 right-6 text-slate-300 group-hover:text-teal-500 transition-colors"></i>
                         </h3>
                         <p class="text-slate-600 text-sm leading-relaxed">
-                            由胡志明市的書閣飯店管理，坐落於被譽為「亞洲十大最美海灘」之一的安邦海灘，是一家高品質度假勝地。飯店擁有 588 間現代化客房，並設有多功能會議和活動空間，是兼具舒適與實用性的理想之選。
+                            坐落於被譽為「亞洲十大最美海灘」之一的安邦海灘，是一家高品質度假勝地，擁有 588 間現代化客房。
                         </p>
                     </div>
                 </a>
@@ -255,16 +255,11 @@
         ];
 
         function setActiveDay(day) {
-            // 更新按鈕樣式 (套用上二中二下一的 2-2-1 佈局)
             const tabs = document.querySelectorAll('.day-tab');
             tabs.forEach(tab => {
                 const currentDay = parseInt(tab.dataset.day);
-                // 基礎排版樣式：手機版佔 50% (扣除間距)，電腦版自動延展
                 const baseClass = "day-tab w-[calc(50%-0.25rem)] sm:w-auto sm:flex-1 px-2 sm:px-6 py-3 sm:py-4 rounded-xl font-bold text-lg transition-all duration-300 flex flex-col items-center gap-1 sm:min-w-[120px] cursor-pointer";
-                
-                // 設定按鈕內的文字
                 tab.innerHTML = `<span class="text-sm font-medium opacity-80">Day ${currentDay}</span>`;
-
                 if (currentDay === day) {
                     tab.className = `${baseClass} bg-teal-600 text-white shadow-lg shadow-teal-600/30 scale-[1.02] sm:scale-105 z-10`;
                 } else {
@@ -272,11 +267,9 @@
                 }
             });
 
-            // 取得當天資料
             const dayData = itinerary.find(d => d.day === day);
             const container = document.getElementById('day-content-container');
 
-            // 建立時間軸 HTML (包含點擊 Google 搜尋功能)
             const activitiesHtml = dayData.activities.map(activity => {
                 const searchQuery = encodeURIComponent('越南 ' + activity.title);
                 const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
@@ -297,7 +290,6 @@
                 `;
             }).join('');
 
-            // 注入行程區塊內容
             container.innerHTML = `
                 <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden transition-all duration-500">
                     <div class="bg-teal-50/50 p-6 md:p-8 border-b border-teal-100">
@@ -311,12 +303,10 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="p-6 md:p-8 grid md:grid-cols-3 gap-8">
                         <div class="md:col-span-2 space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
                             ${activitiesHtml}
                         </div>
-
                         <div class="space-y-6">
                             <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100">
                                 <h4 class="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
@@ -338,7 +328,6 @@
                                     </li>
                                 </ul>
                             </div>
-
                             <div class="bg-indigo-50 rounded-2xl p-6 border border-indigo-100">
                                 <h4 class="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
                                     <i data-lucide="home" class="w-5 h-5 text-indigo-600"></i>
@@ -350,12 +339,9 @@
                     </div>
                 </div>
             `;
-
-            // 重新渲染注入的 SVG 圖示
             lucide.createIcons();
         }
 
-        // 初始化：預設顯示第一天並載入所有靜態圖示
         document.addEventListener('DOMContentLoaded', () => {
             setActiveDay(1);
             lucide.createIcons();
